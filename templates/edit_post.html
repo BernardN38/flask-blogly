@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block head %}
+    <link rel="stylesheet"  href="../static/edit.css">
+{% endblock %}
+
+{% block content %}
+    <h1>Edit Post</h1>
+    <form action="/posts/{{post.id}}/edit" method="POST">
+        <label for="title">Post Title:</label>
+        <input type="text" name="title" id="title" value="{{post.title}}">
+        <br>
+        <label for="content">Post Content:</label>
+        <input type="text" name="content" id="content" value="{{post.content}}">
+        <button>Submit</button>
+    </form>
+{% endblock %}

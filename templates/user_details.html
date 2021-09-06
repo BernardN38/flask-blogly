@@ -1,8 +1,35 @@
 {% extends 'base.html' %}
 
+
+{% block head %}
+<link rel="stylesheet" href="../static/user_details.css">
+{% endblock %}
+
 {% block content %}
 <h1>{{user.first_name}} {{  user.last_name }}</h1>
-<img src="{{user.image_url}}" alt="">
-<a href="/edit/{{user.id}}"><button>EDIT</button></a><button>Delete</button>
+<div id="details-cont">
+    <div>
+        <img src="{{user.image_url}}" alt=""> 
+    </div>
+    <div>
+        <a href="/edit/{{user.id}}"><button>Edit User</button></a>
+        <a href="/delete/{{user.id}}"><button>Delete User</button></a>
+        <a href="/users/{{user.id}}/posts/new"><button>Add Post</button></a>
+    </div>
+    <div class="post-cont">
+        
+            {% for post in posts %}
+                <div class='post'>    
+                <h2>{{post.title}}</h2>
+                <p>{{post.content}}</p>
+                <a href="/posts/{{post.id}}/edit"><button>Edit Post</button></a>
+                <a href="/posts/{{post.id}}/delete"><button>Delete Post</button></a>
+                </div>
+            {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
 {% endblock %}
 
