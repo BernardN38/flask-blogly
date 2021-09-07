@@ -11,7 +11,21 @@
         <input type="text" name="title" id="title" value="{{post.title}}">
         <br>
         <label for="content">Post Content:</label>
-        <input type="text" name="content" id="content" value="{{post.content}}">
+        <textarea type="text" name="content" id="content" value="{{post.content}}">{{post.content}}</textarea>
+        <div id='tags'>
+            {% for tag in tags %}
+            <div>
+                <input type="radio" name='{{tag.name}}' id='{{tag.name}}' checked>
+                <label for="{{tag.name}}">{{tag.name.capitalize()}}</label>
+            </div>
+            {% endfor %}
+            {% for tag in all_tags %}
+            <div>
+                <input type="radio" name='{{tag.name}}' id='{{tag.name}}' >
+                <label for="{{tag.name}}">{{tag.name.capitalize()}}</label>
+            </div>
+            {% endfor %}
         <button>Submit</button>
+
     </form>
 {% endblock %}

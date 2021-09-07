@@ -24,3 +24,11 @@ img {
 a {
     display: inline;
 }
+
+.tag {
+    color: white;
+    background-color: blue;
+    border-radius: 30%;
+    transform: scaleY(.90);
+    margin: 3px;
+}

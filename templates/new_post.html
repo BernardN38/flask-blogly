@@ -1,13 +1,35 @@
 {% extends 'base.html' %}
 
+{% block head %}
+    <link rel="stylesheet"  href="/static/new_post.css">
+{% endblock %}
 
 {% block content %}
 <h1>New Post for {{user.first_name}}</h1>
 <form action="/users/{{user.id}}/posts/new" method='POST'>
     <label for="title">Title:</label>
     <input type="text" id="title" name="title">
+    <br>
     <label for="content">Content:</label>
-    <input type="text" id="content" name="content">
+    <textarea type="text" id="content" name="content"> </textarea>
+    <div id='tags'>
+        <div>
+            <input type="radio" name="tag" id="Fun">
+            <label for="fun">Fun</label>
+        </div>
+        <div>
+            <input type="radio" name="tag" id="Politics">
+            <label for="Politics">Politics</label>    
+        </div>
+        <div>
+            <input type="radio" name="tag" id="Sports">
+        <label for="Sports">Sports</label>
+        </div>
+        <div>
+            <input type="radio" name="tag" id="News">
+        <label for="News">News</label>
+        </div>
+    </div>
     <button>Post</button>
 </form>
 {% endblock %}

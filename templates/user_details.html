@@ -2,7 +2,7 @@
 
 
 {% block head %}
-<link rel="stylesheet" href="../static/user_details.css">
+<link rel="stylesheet" href="/static/user_details.css">
 {% endblock %}
 
 {% block content %}
@@ -22,6 +22,11 @@
                 <div class='post'>    
                 <h2>{{post.title}}</h2>
                 <p>{{post.content}}</p>
+                <div id="tags">
+                    {% for tag in post.tags %}
+                    <button class="tag">{{tag.name}}</button>
+                    {% endfor %}
+                </div>
                 <a href="/posts/{{post.id}}/edit"><button>Edit Post</button></a>
                 <a href="/posts/{{post.id}}/delete"><button>Delete Post</button></a>
                 </div>

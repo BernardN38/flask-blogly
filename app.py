@@ -1,8 +1,9 @@
 """Blogly application."""
 
 from flask import Flask,render_template, redirect,request
-from models import db, connect_db, pg_user, pg_pwd, User,Post
+from models import db, connect_db, pg_user, pg_pwd, User,Post,Tag,Post_tag
 from flask_debugtoolbar import DebugToolbarExtension
+import sys
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://{username}:{password}@localhost:5432/blogly_db".format(username=pg_user, password=pg_pwd)
@@ -11,7 +12,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://{username}:{password}@loca
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = True
 app.config['SECRET_KEY'] = 'welcomehomesir'
-app.config['DEBUG_TB_INTERCEPT_REDIRECTS']=False
+app.config['DEBUG_TB_INTERCEPT_REDIRECTS']=True
 debug = DebugToolbarExtension(app)
 
 connect_db(app)
@@ -82,13 +83,20 @@ def new_post_add(user_id):
 @app.route('/posts/<post_id>/edit')
 def post_edit_form(post_id):
     post = Post.query.get(post_id)
-    return render_template('edit_post.html',post=post)
+    all_tags = list(Tag.query.all())
+    for tag in post.tags:
+        all_tags.remove(tag)
+    return render_template('edit_post.html',post=post, tags=post.tags, all_tags=all_tags,)
 
 @app.route('/posts/<post_id>/edit', methods=['POST'])
 def edit_form_handle(post_id):
     post = Post.query.get(post_id)
     post.title = request.form.get('title')
     post.content = request.form.get('content')
+    all_tags = Tag.query.all()
+    for tag in all_tags:
+        if request.form.get(tag.name) == 'on':
+            post.tags.append(Tag.query.filter_by(name=tag.name).one())
     db.session.add(post)
     db.session.commit()
     return redirect('/')
@@ -100,3 +108,14 @@ def delete_post(post_id):
     db.session.delete(post)
     db.session.commit()
     return redirect('/')
+
+
+@app.route('/tags')
+def show_tags():
+    tags = Tag.query.all()
+    return render_template('tags.html', tags=tags)
+
+
+@app.route('/tags/<tag_id>')
+def show_tag_details(tag_id):
+    return render_template('tag_details.html')

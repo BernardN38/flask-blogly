@@ -1,6 +1,9 @@
 """Models for Blogly."""
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
+
+from sqlalchemy.orm import backref
+
  
 
 pg_user = "tester"
@@ -22,6 +25,10 @@ class User(db.Model):
     def get_user_details(cls, user_id):
        return cls.query.filter_by(id=user_id).one()
 
+    @classmethod
+    def get_all_posts(cls,user_id):
+        return Post.query.filter_by(user=user_id).all()
+
     id = db.Column(
         db.Integer,
         primary_key=True,
@@ -39,7 +46,7 @@ class User(db.Model):
         db.String(2048),
         nullable=True
     )
-
+    
 
 class Post(db.Model):
     __tablename__ = 'posts'
@@ -47,7 +54,6 @@ class Post(db.Model):
     @classmethod
     def get_user_posts(cls, user_id):
        return cls.query.filter_by(user=user_id).all()
-
     id = db.Column(
         db.Integer,
         primary_key=True,
@@ -67,3 +73,18 @@ class Post(db.Model):
         nullable=False,
     )
     user = db.Column(db.Integer, db.ForeignKey('users.id'))
+    tags = db.relationship('Tag', secondary='post_tags', backref='posts')
+
+
+
+class Tag(db.Model):
+    __tablename__= 'tags'
+
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    name = db.Column(db.Text, nullable=False, unique=True)
+
+class Post_tag(db.Model):
+    __tablename__ = 'post_tags'
+
+    post_id = db.Column(db.Integer, db.ForeignKey('posts.id'), primary_key=True)
+    tag_id = db.Column(db.Integer, db.ForeignKey('tags.id'), primary_key=True)
